@@ -26,23 +26,26 @@ export default function LoginPage() {
 
     if (res.ok) {
       // after login, navigate back to the original page
-      router.push(from);
-    } else {
-      const data = await res.json().catch(() => ({ message: 'Login failed' }));
-      setError(data.message || 'Login failed');
+       router.push(from);
+        } else {
+        const data = await res.json().catch(() => ({ message: 'Login failed' }));
+        setError(data.message || 'Login failed');
+        }
     }
-  }
 
-  return (
-    <main style={{ padding: 24 }}>
-      <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <p>This demo login accepts username: <b>demo</b> and password: <b>demo</b></p>
-        <button type="submit" disabled={loading}>
-          {loading ? 'Signing in...' : 'Sign in as demo'}
-        </button>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-      </form>
-    </main>
-  );
+    return (
+        <main style={{ padding: 24 }}>
+        <h1>Login</h1>
+        <form onSubmit={handleSubmit}>
+            <p>This demo login accepts</p>
+            <p>username: <b>demo</b></p>
+            <p>password: <b>demo</b></p>
+            <p>Press the button below to sign in using these credentials</p>
+            <button type="submit" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign in as demo'}
+            </button>
+            {error && <p style={{ color: 'red' }}>{error}</p>}
+        </form>
+        </main>
+    );
 }

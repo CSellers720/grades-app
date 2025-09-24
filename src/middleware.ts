@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // Minimal middleware that checks for a JWT stored in the cookie named `token`.
 // For a real app you should verify signatures server-side. This example performs
@@ -17,8 +17,8 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/public') ||
     pathname.startsWith('/favicon.ico') ||
-    pathname.startsWith('/login') ||
-    PUBLIC_FILE.test(pathname)
+    pathname.startsWith('/login')
+    // PUBLIC_FILE.test(pathname)
   ) {
     return NextResponse.next();
   }
@@ -35,7 +35,18 @@ export function middleware(req: NextRequest) {
   try {
     const parts = token.split('.');
     if (parts.length === 3) {
-      const payload = JSON.parse(Buffer.from(parts[1], 'base64').toString('utf8'));
+      // Decode base64url payload in Edge runtime (no Buffer available)
+      function base64UrlDecode(input: string) {
+        // base64url -> base64
+        let b64 = input.replace(/-/g, '+').replace(/_/g, '/');
+        // pad
+        while (b64.length % 4) b64 += '=';
+        // atob is available in the Edge runtime
+        const json = atob(b64);
+        return json;
+      }
+
+      const payload = JSON.parse(base64UrlDecode(parts[1]));
       if (payload.exp && typeof payload.exp === 'number') {
         const now = Math.floor(Date.now() / 1000);
         if (payload.exp < now) {
