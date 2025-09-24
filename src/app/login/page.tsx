@@ -16,6 +16,9 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
+    // In a real app, you'd get these from form fields.
+    // This would then be sent to the core service for verification
+    // at which point you'd get a valid security token back for the user's session.
     const res = await fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

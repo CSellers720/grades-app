@@ -17,8 +17,8 @@ export function middleware(req: NextRequest) {
     pathname.startsWith('/api') ||
     pathname.startsWith('/public') ||
     pathname.startsWith('/favicon.ico') ||
-    pathname.startsWith('/login')
-    // PUBLIC_FILE.test(pathname)
+    pathname.startsWith('/login') ||
+    PUBLIC_FILE.test(pathname)
   ) {
     return NextResponse.next();
   }
